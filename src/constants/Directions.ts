@@ -1,0 +1,16 @@
+export enum Directions {
+    LEFT = 'LEFT',
+    RIGHT = 'RIGHT',
+    UP = 'UP',
+    DOWN = 'DOWN',
+    CRACK_LEFT = 'ACT,LEFT',
+    CRACK_RIGHT = 'ACT,RIGHT',
+    STOP = '',
+    DIE = 'ACT(0)',
+    SHOOT_LEFT = 'ACT(1),LEFT',
+    SHOOT_RIGHT = 'ACT(1),RIGHT',
+    OPEN_DOOR_LEFT = 'ACT(2),LEFT',
+    OPEN_DOOR_RIGHT = 'ACT(2),RIGHT',
+    CLOSE_DOOR_LEFT = 'ACT(3),LEFT',
+    CLOSE_DOOR_RIGHT = 'ACT(3),RIGHT',
+}
