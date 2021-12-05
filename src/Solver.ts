@@ -1,6 +1,7 @@
 import {Board} from "./Board";
 import {Directions} from "./constants/Directions";
 import {PathFinder} from "./PathFinder";
+import {server} from "./server";
 
 export function isCoordinates(pet: { x: number, y: number} | any): pet is { x: number, y: number} {
     return (pet as { x: number, y: number})?.x !== undefined;
@@ -45,6 +46,14 @@ export class Solver {
     solve(board: Board): string {
         const boardString = board.boardAsString();
 
+        server.sendBoard(boardString);
+
+        if (!server.settings.useBot) {
+            const move = server.lastMove;
+            server.clearLastMove();
+            return move;
+        }
+
         const pf = new PathFinder(board);
 
         const path = pf.findNearestPath()
@@ -56,11 +65,10 @@ export class Solver {
             rows[y + 1] = replaceAt(rows[y + 1], x, '■')
         })
 
-        console.log(rows.reverse().join('\n'))
-
         const answer = getDirection(path, board);
 
-        console.log("Answer: " + answer);
+        // console.log(rows.reverse().join('\n'))
+        // console.log("Answer: " + answer);
 
         return answer;
     }

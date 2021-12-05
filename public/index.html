@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+  >
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+      .container {
+          display: flex;
+          flex-direction: row;
+      }
+      .controls {
+          flex: 1;
+          display: flex;
+      }
+      .board {
+          flex: 1;
+      }
+      .board {
+          font-family: monospace;
+          white-space: pre;
+      }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+<div class="container">
+  <div id="controls" class="controls">
+    <div>
+      <input type="checkbox" id="control" name="control">
+      <label for="control">Use control</label>
+    </div>
+    <br>
+    <br>
+    ArrowUp - up<br>
+    ArrowDown - DOWN<br>
+    ArrowLeft - LEFT<br>
+    ArrowRight - RIGHT<br>
+    Space - Stop<br>
+    z - CRACK_LEFT<br>
+    c - CRACK_RIGHT<br>
+    a - SHOOT_LEFT<br>
+    d - SHOOT_RIGHT<br>
+    k - DIE<br>
+    q - OPEN_DOOR_LEFT<br>
+    e - OPEN_DOOR_RIGHT<br>
+    w - CLOSE_DOOR_LEFT<br>
+    r - CLOSE_DOOR_RIGHT<br>
+  </div>
+  <div id="board" class="board">
+</div>
+
+</div>
+  <script>
+    const boardEl = document.getElementById('board');
+    const controlEl = document.getElementById('control');
+
+    function transformData(data) {
+      if (data.includes('event:board::')) {
+        const [,boardData] = data.split('event:board::');
+        boardEl.innerText = boardData;
+      }
+    }
+
+    const socket = new WebSocket("ws://localhost:8080");
+
+    socket.onopen = function() {
+      // alert("Соединение установлено.");
+    };
+
+    socket.onclose = function(event) {
+      if (event.wasClean) {
+        // alert('Соединение закрыто чисто');
+      } else {
+        // alert('Обрыв соединения'); // например, "убит" процесс сервера
+      }
+      // alert('Код: ' + event.code + ' причина: ' + event.reason);
+    };
+
+    socket.onmessage = function(event) {
+      transformData(event.data)
+      // alert("Получены данные " + event.data);
+    };
+
+    socket.onerror = function(error) {
+      // alert("Ошибка " + error.message);
+    };
+
+    controlEl.addEventListener('change', function() {
+      if (controlEl.checked) {
+        socket.send(`event:settings::NOT_BOT`)
+      } else {
+        socket.send(`event:settings::NOT`)
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      switch (e.key) {
+        case "ArrowUp": {
+          socket.send(`event:direction::UP`)
+          break;
+        }
+        case "ArrowDown": {
+          socket.send(`event:direction::DOWN`)
+          break;
+        }
+        case "ArrowLeft": {
+          socket.send(`event:direction::LEFT`)
+          break;
+        }
+        case "ArrowRight": {
+          socket.send(`event:direction::RIGHT`)
+          break;
+        }
+        case " ": {
+          socket.send(`event:direction::`)
+          break;
+        }
+        case "z": {
+          socket.send(`event:direction::ACT,LEFT`)
+          break;
+        }
+        case "c": {
+          socket.send(`event:direction::ACT,RIGHT`)
+          break;
+        }
+        case "k": {
+          socket.send(`event:direction::ACT(0)`)
+          break;
+        }
+        case "a": {
+          socket.send(`event:direction::ACT(1),LEFT`)
+          break;
+        }
+        case "d": {
+          socket.send(`event:direction::ACT(1),RIGHT`)
+          break;
+        }
+        case "q": {
+          socket.send(`event:direction::ACT(2),LEFT`)
+          break;
+        }
+        case "e": {
+          socket.send(`event:direction::ACT(2),RIGHT`)
+          break;
+        }
+        case "w": {
+          socket.send(`event:direction::ACT(3),LEFT`)
+          break;
+        }
+        case "r": {
+          socket.send(`event:direction::ACT(3),RIGHT`)
+          break;
+        }
+      }
+      console.log(e.key)
+    });
+  </script>
+</body>
+</html>
