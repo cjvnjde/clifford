@@ -1,7 +1,8 @@
 import {Point} from './Point';
 import {Board} from './Board';
-import {Elements} from './constants/Elements';
+import {CHARACTER_ELEMENTS, Elements} from './constants/Elements';
 import {PathFinderBase} from './PathFinderBase';
+import {includes} from 'lodash';
 
 export class PathFinderToClues extends PathFinderBase {
     constructor(board: Board) {
@@ -22,43 +23,7 @@ export class PathFinderToClues extends PathFinderBase {
         const isOnTheFloor = !this.isWalkable(underCellType)
             || [Elements.LADDER, Elements.HERO_LADDER, Elements.HERO_MASK_LADDER, Elements.OTHER_HERO_LADDER].includes(underCellType);
         const isOnTheLadder = [Elements.LADDER, Elements.HERO_LADDER, Elements.HERO_MASK_LADDER, Elements.OTHER_HERO_LADDER].includes(currentCellType);
-        const isOnTheEnemy = [
-            Elements.OTHER_HERO_DIE,
-            Elements.OTHER_HERO_LADDER,
-            Elements.OTHER_HERO_LEFT,
-            Elements.OTHER_HERO_RIGHT,
-            Elements.OTHER_HERO_FALL,
-            Elements.OTHER_HERO_PIPE,
-            Elements.OTHER_HERO_PIT,
-            Elements.OTHER_HERO_MASK_DIE,
-            Elements.OTHER_HERO_MASK_LADDER,
-            Elements.OTHER_HERO_MASK_LEFT,
-            Elements.OTHER_HERO_MASK_RIGHT,
-            Elements.OTHER_HERO_MASK_FALL,
-            Elements.OTHER_HERO_MASK_PIPE,
-            Elements.OTHER_HERO_MASK_PIT,
-            Elements.ENEMY_HERO_DIE,
-            Elements.ENEMY_HERO_LADDER,
-            Elements.ENEMY_HERO_LEFT,
-            Elements.ENEMY_HERO_RIGHT,
-            Elements.ENEMY_HERO_FALL,
-            Elements.ENEMY_HERO_PIPE,
-            Elements.ENEMY_HERO_PIT,
-            Elements.ENEMY_HERO_MASK_DIE,
-            Elements.ENEMY_HERO_MASK_LADDER,
-            Elements.ENEMY_HERO_MASK_LEFT,
-            Elements.ENEMY_HERO_MASK_RIGHT,
-            Elements.ENEMY_HERO_MASK_FALL,
-            Elements.ENEMY_HERO_MASK_PIPE,
-            Elements.ENEMY_HERO_MASK_PIT,
-            Elements.ROBBER_LADDER,
-            Elements.ROBBER_LEFT,
-            Elements.ROBBER_RIGHT,
-            Elements.ROBBER_FALL,
-            Elements.ROBBER_PIPE,
-            Elements.ROBBER_PIT,
-        ]
-            .includes(underCellType);
+        const isOnTheEnemy = includes(CHARACTER_ELEMENTS, underCellType);
 
         const cellR = this.board.getAt(x + 1, y);
         const pointR = new Point(x + 1, y);
