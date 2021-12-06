@@ -2,6 +2,7 @@ import {Point} from './Point';
 import {Board} from './Board';
 import {isCoordinates} from './Solver';
 import {Elements} from './constants/Elements';
+import {Coordinates} from './interfaces/Coordinates';
 
 export const transformPath = function transformPath(point: Point): [number, number][] {
     if (!point) {
@@ -20,13 +21,13 @@ export class PathFinder {
     private explored: Point[] = [];
     private board: Board;
 
-    constructor(board: Board, initialPoint?: { x: number, y: number }) {
+    constructor(board: Board, initialPoint?: Coordinates) {
         this.board = board;
 
         this.init(initialPoint);
     }
 
-    public init(initialPoint?: { x: number, y: number }): void {
+    public init(initialPoint?: Coordinates): void {
         if (initialPoint) {
             this.reachable.push(new Point(initialPoint.x, initialPoint.y));
         } else {

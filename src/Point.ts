@@ -1,4 +1,6 @@
-export class Point {
+import {Coordinates} from './interfaces/Coordinates';
+
+export class Point implements Coordinates {
     public from: Point | null = null;
     public x: number;
     public y: number;

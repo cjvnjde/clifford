@@ -1,6 +1,7 @@
 import {LengthHelper} from './LengthHelper';
 import {Elements} from './constants/Elements';
 import {HERO_ELEMENTS} from './constants/Elements';
+import {Coordinates} from './interfaces/Coordinates';
 
 export class Board {
     private readonly board: string;
@@ -19,7 +20,7 @@ export class Board {
         return this.board.charAt(this.lengthHelper.getLength(x, y)) as Elements;
     }
 
-    public find(element: Elements): { x: number, y: number } | null {
+    public find(element: Elements): Coordinates | null {
         for (let i = 0; i < this.board.length; i++) {
             if (this.board[i] === element) {
                 return this.lengthHelper.getXY(i);

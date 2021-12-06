@@ -2,9 +2,10 @@ import {Board} from './Board';
 import {Directions} from './constants/Directions';
 import {PathFinder} from './PathFinder';
 import {server} from './server';
+import {Coordinates} from './interfaces/Coordinates';
 
-export function isCoordinates(pet: { x: number, y: number} | any): pet is { x: number, y: number} {
-    return (pet as { x: number, y: number})?.x !== undefined;
+export function isCoordinates(pet: Coordinates | any): pet is Coordinates {
+    return (pet as Coordinates)?.x !== undefined;
 }
 
 function getDirection(path: [number, number][], board: Board): Directions {
