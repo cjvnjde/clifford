@@ -1,6 +1,5 @@
 import {LengthHelper} from './LengthHelper';
-import {Elements} from './constants/Elements';
-import {HERO_ELEMENTS} from './constants/Elements';
+import {Elements, HERO_ELEMENTS} from './constants/Elements';
 import {Coordinates} from './interfaces/Coordinates';
 
 export class Board {
@@ -30,7 +29,7 @@ export class Board {
         return null;
     }
 
-    public getHero(): { x: number, y: number } | null {
+    public getHero(): Coordinates {
         for (const element of HERO_ELEMENTS) {
             const heroCoords = this.find(element);
 
@@ -40,7 +39,7 @@ export class Board {
             }
         }
 
-        return null;
+        return {x: 0, y: 0};
     }
 
     public boardAsString(): string {

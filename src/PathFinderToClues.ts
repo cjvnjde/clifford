@@ -1,59 +1,13 @@
 import {Point} from './Point';
 import {Board} from './Board';
-import {isCoordinates} from './Solver';
 import {Elements} from './constants/Elements';
-import {Coordinates} from './interfaces/Coordinates';
+import {PathFinderBase} from './PathFinderBase';
 
-export const transformPath = function transformPath(point: Point): [number, number][] {
-    if (!point) {
-        return [];
-    }
+export class PathFinderToClues extends PathFinderBase {
+    constructor(board: Board) {
+        const hero = board.getHero();
 
-    if (point.from) {
-        return [[point.x, point.y], ...transformPath(point.from)];
-    }
-
-    return [[point.x, point.y]];
-};
-
-export class PathFinder {
-    private reachable: Point[] = [];
-    private explored: Point[] = [];
-    private board: Board;
-
-    constructor(board: Board, initialPoint?: Coordinates) {
-        this.board = board;
-
-        this.init(initialPoint);
-    }
-
-    public init(initialPoint?: Coordinates): void {
-        if (initialPoint) {
-            this.reachable.push(new Point(initialPoint.x, initialPoint.y));
-        } else {
-            const hero = this.board.getHero();
-
-            if (isCoordinates(hero)) {
-                this.reachable.push(new Point(hero.x, hero.y));
-            }
-        }
-    }
-
-    public isWalkable(cellType: Elements): boolean {
-        return ![Elements.BRICK, Elements.STONE].includes(cellType);
-    }
-
-    public moveToExplored(point: Point): void {
-        this.explored.push(point);
-        const pointIndex = this.reachable.findIndex(r => r.x === point.x && r.y === point.y);
-
-        if (pointIndex !== -1) {
-            this.reachable.splice(pointIndex, 1);
-        }
-    }
-
-    public isInExplored(point: Point): boolean {
-        return !!this.explored.find(e => e.x === point.x && e.y === point.y);
+        super(board, hero);
     }
 
     public explorePoints(point: Point): void {
@@ -61,8 +15,8 @@ export class PathFinder {
         const x = point.x;
         const y = point.y;
 
-        const currentCellType = this.board.getAt(x, y);
-        const underCellType = this.board.getAt(x, y - 1);
+        const currentCellType = super.board.getAt(x, y);
+        const underCellType = super.board.getAt(x, y - 1);
 
         const isOnThePipe = [Elements.HERO_PIPE, Elements.PIPE, Elements.HERO_MASK_PIPE].includes(currentCellType);
         const isOnTheFloor = !this.isWalkable(underCellType)
@@ -153,36 +107,5 @@ export class PathFinder {
 
             this.reachable.push(pointT);
         }
-    }
-
-    public findPoints(elements = [Elements.CLUE_KNIFE, Elements.CLUE_GLOVE, Elements.CLUE_RING]): Point[] {
-        const foundPoints = [];
-
-        do {
-            const reachablePoint = this.reachable[0];
-
-            const reachablePointType = this.board.getAt(reachablePoint.x, reachablePoint.y);
-            if (elements.includes(reachablePointType)) {
-                foundPoints.push(reachablePoint);
-                break;
-            }
-
-            this.explorePoints(reachablePoint);
-        } while (this.reachable.length > 0);
-
-        return foundPoints;
-    }
-
-    public findAllPath(elements?: Elements[]): [number, number][][] {
-        const points = this.findPoints(elements);
-
-        return points.map(point => {
-            return transformPath(point);
-        });
-    }
-
-    public findNearestPath(elements?: Elements[]): [number, number][] {
-        const [point] = this.findPoints(elements);
-        return transformPath(point);
     }
 }

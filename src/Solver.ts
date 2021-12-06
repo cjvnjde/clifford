@@ -1,6 +1,6 @@
 import {Board} from './Board';
 import {Directions} from './constants/Directions';
-import {PathFinder} from './PathFinder';
+import {PathFinderToClues} from './PathFinderToClues';
 import {server} from './server';
 import {Coordinates} from './interfaces/Coordinates';
 
@@ -54,7 +54,7 @@ export class Solver {
             return move;
         }
 
-        const pf = new PathFinder(board);
+        const pf = new PathFinderToClues(board);
 
         const path = pf.findNearestPath();
 
