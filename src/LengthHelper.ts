@@ -1,3 +1,5 @@
+import {Coordinates} from './interfaces/Coordinates';
+
 export class LengthHelper {
     private readonly boardSize: number;
 
@@ -17,11 +19,7 @@ export class LengthHelper {
         return this.getY(y) * this.boardSize + this.getX(x);
     }
 
-    public getXY(length: number): {x: number, y: number} | null {
-        if (length == -1) {
-            return null;
-        }
-
+    public getXY(length: number): Coordinates {
         const x = this.getX(length % this.boardSize);
         const y = this.getY(Math.trunc(length / this.boardSize));
 

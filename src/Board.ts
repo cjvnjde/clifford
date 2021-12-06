@@ -1,5 +1,5 @@
 import {LengthHelper} from './LengthHelper';
-import {Elements, HERO_ELEMENTS} from './constants/Elements';
+import {CLUE_ELEMENTS, Elements, HERO_ELEMENTS} from './constants/Elements';
 import {Coordinates} from './interfaces/Coordinates';
 
 export class Board {
@@ -19,6 +19,18 @@ export class Board {
         return this.board.charAt(this.lengthHelper.getLength(x, y)) as Elements;
     }
 
+    public findAll(element: Elements): Coordinates[] {
+        const coordinates: Coordinates[] = [];
+
+        for (let i = 0; i < this.board.length; i++) {
+            if (this.board[i] === element) {
+                coordinates.push(this.lengthHelper.getXY(i));
+            }
+        }
+
+        return coordinates;
+    }
+
     public find(element: Elements): Coordinates | null {
         for (let i = 0; i < this.board.length; i++) {
             if (this.board[i] === element) {
@@ -27,6 +39,18 @@ export class Board {
         }
 
         return null;
+    }
+
+    public getClues(): Coordinates[] {
+        const elements: Coordinates[] = [];
+
+        for (const element of CLUE_ELEMENTS) {
+            const clueCoords = this.findAll(element);
+
+            elements.push(...clueCoords);
+        }
+
+        return elements;
     }
 
     public getHero(): Coordinates {

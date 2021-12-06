@@ -1,8 +1,7 @@
 import {Point} from './Point';
 import {Board} from './Board';
-import {Elements} from './constants/Elements';
+import {Elements, RUBBER_ELEMENTS} from './constants/Elements';
 import {Coordinates} from './interfaces/Coordinates';
-import {transformPath} from './utils';
 
 export abstract class PathFinderBase {
     protected reachable: Point[] = [];
@@ -20,7 +19,7 @@ export abstract class PathFinderBase {
     }
 
     protected isWalkable(cellType: Elements): boolean {
-        return ![Elements.BRICK, Elements.STONE].includes(cellType);
+        return ![Elements.BRICK, Elements.STONE, ...RUBBER_ELEMENTS].includes(cellType);
     }
 
     protected moveToExplored(point: Point): void {
@@ -34,11 +33,12 @@ export abstract class PathFinderBase {
 
     protected isInExplored(point: Point): boolean {
         return !!this.explored.find(e => e.x === point.x && e.y === point.y);
+            // || !!this.reachable.find(e => e.x === point.x && e.y === point.y);
     }
 
     public abstract explorePoints(point: Point): void;
 
-    public findPoints(elements = [Elements.CLUE_KNIFE, Elements.CLUE_GLOVE, Elements.CLUE_RING]): Point[] {
+    public findPoints(elements: Elements[]): Point[] {
         const foundPoints = [];
 
         do {
@@ -56,16 +56,29 @@ export abstract class PathFinderBase {
         return foundPoints;
     }
 
-    public findAllPath(elements?: Elements[]): [number, number][][] {
-        const points = this.findPoints(elements);
+    //
+    // public findAllPath(elements?: Elements[]): Point[][] {
+    //     const points = this.findPoints(elements);
+    //
+    //     return points.map(point => {
+    //         return PathFinderBase.transformPath(point);
+    //     });
+    // }
 
-        return points.map(point => {
-            return transformPath(point);
-        });
+    public findNearestPath(elements: Elements[]): Point[] {
+        const [point] = this.findPoints(elements);
+        return PathFinderBase.transformPath(point);
     }
 
-    public findNearestPath(elements?: Elements[]): [number, number][] {
-        const [point] = this.findPoints(elements);
-        return transformPath(point);
+    protected static transformPath(point: Point): Point[] {
+        if (!point) {
+            return [];
+        }
+
+        if (point.from) {
+            return [point, ...PathFinderBase.transformPath(point.from)];
+        }
+
+        return [point];
     }
 }

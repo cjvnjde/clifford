@@ -260,7 +260,29 @@ export const HERO_ELEMENTS = [
     Elements.HERO_MASK_FALL,
     Elements.HERO_MASK_PIPE,
     Elements.HERO_MASK_PIT,
-] as const;
+];
+
+export const ENEMY_ELEMENTS = [
+    Elements.OTHER_HERO_LADDER,
+    Elements.OTHER_HERO_LEFT,
+    Elements.OTHER_HERO_RIGHT,
+    Elements.OTHER_HERO_PIPE,
+
+    Elements.OTHER_HERO_MASK_LADDER,
+    Elements.OTHER_HERO_MASK_LEFT,
+    Elements.OTHER_HERO_MASK_RIGHT,
+    Elements.OTHER_HERO_MASK_PIPE,
+
+    Elements.ENEMY_HERO_LADDER,
+    Elements.ENEMY_HERO_LEFT,
+    Elements.ENEMY_HERO_RIGHT,
+    Elements.ENEMY_HERO_PIPE,
+
+    Elements.ENEMY_HERO_MASK_LADDER,
+    Elements.ENEMY_HERO_MASK_LEFT,
+    Elements.ENEMY_HERO_MASK_RIGHT,
+    Elements.ENEMY_HERO_MASK_PIPE,
+];
 
 export const CHARACTER_ELEMENTS = [
     Elements.HERO_DIE,
@@ -317,4 +339,41 @@ export const CHARACTER_ELEMENTS = [
     Elements.ROBBER_FALL,
     Elements.ROBBER_PIPE,
     Elements.ROBBER_PIT,
-] as const;
+];
+
+export const CLUE_ELEMENTS = [
+    Elements.CLUE_KNIFE,
+    Elements.CLUE_GLOVE,
+    Elements.CLUE_RING
+];
+
+export const LADDER_ELEMENTS = [
+    Elements.LADDER,
+    Elements.HERO_LADDER,
+    Elements.ROBBER_LADDER,
+    Elements.ENEMY_HERO_LADDER,
+    Elements.HERO_MASK_LADDER,
+    Elements.ENEMY_HERO_MASK_LADDER,
+    Elements.OTHER_HERO_LADDER,
+    Elements.OTHER_HERO_MASK_LADDER,
+];
+
+export const PIPE_ELEMENTS = [
+    Elements.PIPE,
+    Elements.HERO_PIPE,
+    Elements.ROBBER_PIPE,
+    Elements.ENEMY_HERO_PIPE,
+    Elements.HERO_MASK_PIPE,
+    Elements.ENEMY_HERO_MASK_PIPE,
+    Elements.OTHER_HERO_PIPE,
+    Elements.OTHER_HERO_MASK_PIPE,
+];
+
+export const RUBBER_ELEMENTS = [
+    Elements.ROBBER_LADDER,
+    Elements.ROBBER_LEFT,
+    Elements.ROBBER_RIGHT,
+    Elements.ROBBER_FALL,
+    Elements.ROBBER_PIPE,
+    Elements.ROBBER_PIT,
+];
