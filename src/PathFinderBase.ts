@@ -9,21 +9,21 @@ export abstract class PathFinderBase {
     protected explored: Point[] = [];
     protected board: Board;
 
-    constructor(board: Board, initialPoint: Coordinates) {
+    protected constructor(board: Board, initialPoint: Coordinates) {
         this.board = board;
 
         this.init(initialPoint);
     }
 
-    public init(initialPoint: Coordinates): void {
+    protected init(initialPoint: Coordinates): void {
         this.reachable.push(new Point(initialPoint.x, initialPoint.y));
     }
 
-    public isWalkable(cellType: Elements): boolean {
+    protected isWalkable(cellType: Elements): boolean {
         return ![Elements.BRICK, Elements.STONE].includes(cellType);
     }
 
-    public moveToExplored(point: Point): void {
+    protected moveToExplored(point: Point): void {
         this.explored.push(point);
         const pointIndex = this.reachable.findIndex(r => r.x === point.x && r.y === point.y);
 
@@ -32,7 +32,7 @@ export abstract class PathFinderBase {
         }
     }
 
-    public isInExplored(point: Point): boolean {
+    protected isInExplored(point: Point): boolean {
         return !!this.explored.find(e => e.x === point.x && e.y === point.y);
     }
 
