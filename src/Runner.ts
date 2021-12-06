@@ -1,10 +1,10 @@
-import WebSocket from "ws";
-import {Board} from "./Board";
-import {Solver} from "./Solver";
+import WebSocket from 'ws';
+import {Board} from './Board';
+import {Solver} from './Solver';
 
 export class Runner {
-    url: string;
-    solver: Solver;
+    private url: string;
+    private solver: Solver;
 
     constructor(serverUrl: string) {
         this.url = serverUrl;
@@ -12,15 +12,15 @@ export class Runner {
     }
 
     private get wsUrl(): string {
-        return this.url.replace("http", "ws")
-            .replace("board/player/", "ws?user=")
-            .replace("?code=", "&code=");
+        return this.url.replace('http', 'ws')
+            .replace('board/player/', 'ws?user=')
+            .replace('?code=', '&code=');
     }
 
     private processBoard(boardString: string): string {
         const board = new Board(boardString);
 
-        return this.solver.solve(board)
+        return this.solver.solve(board);
     }
 
     private parseBoard(message: string): string {
@@ -31,18 +31,18 @@ export class Runner {
     }
 
     public connect(): WebSocket {
-        const socket = new WebSocket(this.wsUrl, {rejectUnauthorized: false})
+        const socket = new WebSocket(this.wsUrl, {rejectUnauthorized: false});
 
         socket.on('open', () => {
-            console.log('Web socket client opened ' + this.url)
+            console.log('Web socket client opened ' + this.url);
         });
 
         socket.on('error', () => {
-            console.log('Web socket client error')
+            console.log('Web socket client error');
         });
 
         socket.on('close', () => {
-            console.log('Web socket client closed')
+            console.log('Web socket client closed');
 
             setTimeout(() => {
                 this.connect();

@@ -8,7 +8,7 @@ export class Point {
         this.y = y;
     }
 
-    setFrom(point: Point) {
+    public setFrom(point: Point): void {
         this.from = point;
     }
 }

@@ -13,7 +13,7 @@ export class LengthHelper {
         return x;
     }
 
-    public getLength(x: number, y: number) {
+    public getLength(x: number, y: number): number {
         return this.getY(y) * this.boardSize + this.getX(x);
     }
 

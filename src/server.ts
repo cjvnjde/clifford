@@ -1,7 +1,7 @@
 import express, {Express} from 'express';
-import path from "path";
-import WebSocket, {WebSocketServer} from "ws";
-import {Directions} from "./constants/Directions";
+import path from 'path';
+import WebSocket, {WebSocketServer} from 'ws';
+import {Directions} from './constants/Directions';
 
 export class Server {
     private wss: WebSocketServer;
@@ -11,7 +11,7 @@ export class Server {
 
     public settings = {
         useBot: true,
-    }
+    };
 
     public lastMove: Directions = Directions.STOP;
 
@@ -19,7 +19,7 @@ export class Server {
         this.wss = new WebSocketServer({port: 8080});
         this.app = express();
 
-        this.init()
+        this.init();
     }
 
     private init(): void {
@@ -31,12 +31,12 @@ export class Server {
     private initSocketServer(): void {
         const transformEvent = (eventData: string): void => {
             if (eventData.includes('event:direction::')) {
-                const [,direction] = eventData.split('event:direction::');
-                this.lastMove = direction as Directions
+                const [, direction] = eventData.split('event:direction::');
+                this.lastMove = direction as Directions;
             }
 
             if (eventData.includes('event:settings::')) {
-                const [,setting] = eventData.split('event:settings::');
+                const [, setting] = eventData.split('event:settings::');
                 switch (setting) {
                     case 'NOT_BOT': {
                         this.settings.useBot = false;
@@ -48,36 +48,36 @@ export class Server {
                     }
                 }
             }
-        }
+        };
 
 
         this.wss.on('connection', ws => {
             this.ws = ws;
 
-            ws.on('message',  data => {
-                transformEvent(data.toString())
+            ws.on('message', data => {
+                transformEvent(data.toString());
                 console.log('received: %s', data);
             });
         });
     }
 
     private initExpressServer(): void {
-        this.app.use(express.static("public"))
+        this.app.use(express.static('public'));
 
-        this.app.get( "/", ( req, res ) => {
-            res.sendFile(path.join(__dirname, "public", "index.html"));
-        } );
+        this.app.get('/', (req, res) => {
+            res.sendFile(path.join(__dirname, 'public', 'index.html'));
+        });
 
         this.app.listen(this.port, () => {
-            console.log( `server started at http://localhost:${ this.port }` );
-        } );
+            console.log(`server started at http://localhost:${this.port}`);
+        });
     }
 
     public sendBoard(boardAsString: string): void {
-        this.ws?.send(`event:board::${boardAsString}`)
+        this.ws?.send(`event:board::${boardAsString}`);
     }
 
-    public clearLastMove() {
+    public clearLastMove(): void {
         this.lastMove = Directions.STOP;
     }
 }
