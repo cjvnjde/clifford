@@ -15,6 +15,16 @@ export class DecisionMaker {
     private previousMove: Directions = Directions.STOP;
 
     public makeDecision(board: Board): Directions {
+
+        const answer = this.killEnemies(board)
+            || this.nextMove(board);
+            // || this.avoidThieves(board);
+
+        this.previousMove = answer;
+        return answer;
+    }
+
+    private nextMove(board: Board): Directions {
         const boardString = board.boardAsString();
         const pf = new PathFinderToClues(board);
 
@@ -27,18 +37,9 @@ export class DecisionMaker {
             rows[y + 1] = DecisionMaker.replaceAt(rows[y + 1], x, '■');
         });
 
-        let answer = this.killEnemies(board);
+        console.log(rows.join('\n'));
 
-        if (answer) {
-            this.previousMove = answer;
-            return answer;
-        }
-
-         answer = DecisionMaker.getDirection(path, board);
-
-        console.log(rows.reverse().join('\n'));
-        this.previousMove = answer;
-        return answer;
+        return DecisionMaker.getDirection(path, board);
     }
 
     private static getDirection(path: Point[], board: Board): Directions {
@@ -62,7 +63,7 @@ export class DecisionMaker {
         const nextBlockType = board.getAt(x, y);
         const dnextBlockType = board.getAt(dx, dy);
 
-        const shouldDestroy = [Elements.BRICK, ...ENEMY_ELEMENTS].includes(nextBlockType);
+        const shouldDestroy = [Elements.BRICK].includes(nextBlockType) && nextBlockType !== Elements.CRACK_PIT;
         const shouldDestroyD = dnextBlockType === Elements.BRICK && dy !== y && !LADDER_ELEMENTS.includes(nextBlockType);
 
         if (shouldDestroyD) {
@@ -137,6 +138,11 @@ export class DecisionMaker {
         }
 
         return null;
+    }
+
+    private avoidThieves(board: Board): Directions {
+        console.log(board);
+        return Directions.STOP;
     }
 
     private static replaceAt(str: string, index: number, replacement: string): string {

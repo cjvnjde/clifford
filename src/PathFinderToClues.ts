@@ -80,13 +80,14 @@ export class PathFinderToClues extends PathFinderBase {
         const x = point.x;
         const y = point.y;
         const currentCellType = this.board.getAt(x, y);
+        const underCellType = this.board.getAt(x, y - 1);
 
         const xFrom = point.from?.x || x;
 
         const cellB = this.board.getAt(x, y - 1);
         const pointB = new Point(x, y - 1);
 
-        const isWalkableB = this.isWalkable(cellB) && !CHARACTER_ELEMENTS.includes(this.underHeroType);
+        const isWalkableB = this.isWalkable(cellB) && !CHARACTER_ELEMENTS.includes(underCellType);
         const isDestroyable = cellB === Elements.BRICK && !LADDER_ELEMENTS.includes(currentCellType) && xFrom - x !== 0;
 
         const canB = (isWalkableB || isDestroyable) && !this.isInExplored(pointB) && y > 0;
