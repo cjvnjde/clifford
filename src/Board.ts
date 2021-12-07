@@ -1,5 +1,5 @@
 import {LengthHelper} from './LengthHelper';
-import {CLUE_ELEMENTS, Elements, HERO_ELEMENTS} from './constants/Elements';
+import {CLUE_ELEMENTS, Elements, ENEMY_ELEMENTS, HERO_ELEMENTS} from './constants/Elements';
 import {Coordinates} from './interfaces/Coordinates';
 
 export class Board {
@@ -45,6 +45,18 @@ export class Board {
         const elements: Coordinates[] = [];
 
         for (const element of CLUE_ELEMENTS) {
+            const clueCoords = this.findAll(element);
+
+            elements.push(...clueCoords);
+        }
+
+        return elements;
+    }
+
+    public getEnemies(): Coordinates[] {
+        const elements: Coordinates[] = [];
+
+        for (const element of ENEMY_ELEMENTS) {
             const clueCoords = this.findAll(element);
 
             elements.push(...clueCoords);
